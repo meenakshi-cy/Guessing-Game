@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="style.css">
+  <title>Number Guessing Game</title>
+</head>
+<body>
+
+<div class="container">
+  <h1>Number Guessing Game 🎯</h1>
+  <p>Guess a number between 1 and 100</p>
+  
+  <div id="inputSection">
+    <input type="number" id="userGuess" placeholder="Enter your guess" min="1" max="100">
+    <!-- <button onclick="checkGuess()">Submit Guess</button> -->
+    <button>Submit Guess</button>
+  </div>
+  
+  <!-- <button class="new-game-btn" onclick="startNewGame()">New Game</button> -->
+  <button class="new-game-btn">New Game</button>
+  
+  <p class="message" id="message"></p>
+
+  <div class="history" id="history">
+    <h3>Guess History:</h3>
+    <div id="guessList"></div>
+  </div>
+  <!-- Back to Projects button -->
+  <a href="../index.html" class="back-btn">⬅️ Back to Projects</a>
+</div>
+<script>
+    // genrate randome number
+    let randomNumber=()=>{ return Math.floor((Math.random()*100)+1);}
+    let guessNumber = randomNumber();
+    console.log(`guessNumber ${guessNumber}`);
+    
+    // form
+    let form=document.querySelector("#inputSection"),
+    guessField=document.querySelector("#userGuess"),
+    submitBtn=document.querySelector("button");
+
+    // new form
+    let startNewGame=document.querySelector(".new-game-btn");
+    startNewGame.style.display="none";
+
+    // display message
+    let displayMsg=document.querySelector("#message");
+
+    // Guess history
+    let guessList=document.querySelector("#guessList");
+
+    // total attempts
+    let attempts=3;
+
+    let i=1;
+
+    displayMsg.textContent=`You have ${attempts} attempts!`;
+    // checking whether given input is between 1 to 100 or a valid number or not
+    
+    
+    submitBtn.addEventListener("click",(e)=>{
+        e.preventDefault();
+        let userNum=parseInt(guessField.value);
+        let difference=Math.abs(userNum-guessNumber);
+        let hints="", won=false;
+        
+
+        if(userNum<1 || userNum>101 || isNaN(userNum)){
+            displayMsg.textContent="Please enter a valid number between 1 and 100.";
+            return;
+        }
+        else{
+            attempts--;
+            
+            if(userNum===guessNumber){
+                hints=`<span class="hint" style="color: green;">🎉 Correct! You guessed it right!</span>`;
+                won=true;
+                endGame();
+            }
+            else if(userNum>guessNumber){
+                if(difference>0||difference<=25){
+                    hints="⬆️ Little High";
+                }
+                else if(difference>25&&difference<=50){
+                    hints="📈 High";
+                }
+                else if(difference>50){
+                    hints="🔥 Too High";
+                }
+            }
+            else if(userNum<guessNumber){
+                if(difference>0||difference<=25){
+                    hints="⬇️ Little Low";
+                }
+                else if(difference>25&&difference<=50){
+                    hints="📉 Low";
+                }
+                else if(difference>50){
+                    hints="❄️ Too Low";
+                }
+            }
+        }
+        if(won){
+            displayMsg.innerHTML=`<span class="hint" style="color: green;">🎉 You Win! The number was ${guessNumber}</span>`;
+        }
+        else{
+            displayMsg.innerHTML=`${hints} | Attempts left: ${attempts}`;
+        }
+
+        guessList.innerHTML+=`<p>Attempt ${i}: <strong>${userNum}</strong> → ${hints}</p>`;
+        i++;
+
+        if(attempts===0){
+            if(won){
+                displayMsg.innerHTML=`<span class="hint" style="color: green;">🎉 You Win! The number was ${guessNumber}</span>`;
+            }
+            else{
+                displayMsg.innerHTML=`<span class="hint" style="color: red;">GAME OVER! The number was ${guessNumber}</span>`; 
+            }
+            endGame();
+        }
+
+    })
+    
+    
+    function endGame(){
+        form.style.display="none";
+        startNewGame.style.display="inline-block";
+    }
+    startNewGame.addEventListener("click",(e)=>{
+        e.preventDefault();
+        guessNumber = randomNumber();
+        i=1;
+        attempts=3;
+        displayMsg.textContent=`You have ${attempts} attempts!`;
+        startNewGame.style.display="none";
+        form.style.display="block";
+        guessList.innerHTML="";
+        guessField.value="";
+        console.log(`new guess ${guessNumber}`);
+    })
+        
+    </script>
+</body>
+</html>
