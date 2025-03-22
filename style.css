@@ -85,3 +85,24 @@ button:hover {
       padding: 10px 20px;
     }
   }
+/* Back to Projects button */
+.back-btn {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 16px;
+    color: #fff;
+    background: #3498db;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: background 0.3s;
+}
+  
+.back-btn:hover {
+    background: #2980b9;
+}
+@media (max-width: 600px) {
+    button, .back-btn {
+      padding: 10px 20px;
+    }
+  }
